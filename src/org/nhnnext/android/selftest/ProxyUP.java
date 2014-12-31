@@ -35,7 +35,7 @@ public class ProxyUP {
 				e.printStackTrace();
 			}
 			
-			client.post("http://192.168.1.13:5009/upload", params, responseHandler); 
+			client.post("http://54.64.250.239:5009/upload", params, responseHandler); 
 	  } 
 //        private String lineEnd = "\r\n";
 //        private String twoHyphens = "--";
