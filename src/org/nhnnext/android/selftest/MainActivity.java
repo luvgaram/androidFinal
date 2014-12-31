@@ -16,16 +16,30 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.devspark.sidenavigation.ISideNavigationCallback;
+import com.devspark.sidenavigation.SideNavigationView;
+import com.devspark.sidenavigation.SideNavigationView.Mode;
 
 public class MainActivity extends ActionBarActivity implements OnClickListener, OnItemClickListener{
 
 	private ArrayList<Article> articleList;
 	private ListView listView;
+	private SideNavigationView sideNavigationView;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		getSupportActionBar().setHomeButtonEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		
+		sideNavigationView = (SideNavigationView) findViewById(R.id.side_navigation_view);
+		sideNavigationView.setMenuItems(R.menu.side_menu);
+		sideNavigationView.setMenuClickCallback(sideNavigationCallback);
+		sideNavigationView.setMode(Mode.LEFT);
+		
+		
 		
 		Button mButtonWrite =  (Button)findViewById(R.id.main_button_write);
 		Button mButtonRefresh = (Button)findViewById(R.id.main_button_refresh);
@@ -50,6 +64,10 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 		String text ="";
 		
 		switch(item.getItemId()){
+		case android.R.id.home:
+			text = "Side Navigation toggle";
+			sideNavigationView.toggleMenu();
+			break;
 		case R.id.action_item_add:
 			text = "Action item, with text, displayed if room exists";
 			break;
@@ -121,7 +139,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 		
 		switch(arg0.getId()){
 		case R.id.main_button_write:
-			Intent intentWrite = new Intent(this, Write_article.class);
+			Intent intentWrite = new Intent(this, ArticleWriter.class);
 			startActivity(intentWrite);
 			//startActivity(intentWrite);
 		case R.id.main_button_refresh:
@@ -137,12 +155,34 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 		 * putExtra() intent에 데이터를 저장할 때 사
 		 * getExtra() intent에서 데이터를 가져올 때 사용 
 		 */
-		Intent intent = new Intent(this, View_article.class);
+		Intent intent = new Intent(this, ViewActivity.class);
 		
 		intent.putExtra("ArticleNumber", articleList.get(position).getArticleNumber() + "");
 		startActivity(intent);
 		
 	}
 
+	ISideNavigationCallback sideNavigationCallback = new ISideNavigationCallback() {
+		
+		@Override
+		public void onSideNavigationItemClick(int itemId) {
+			String text = "";
+			switch (itemId) {
+			case R.id.side_navigation_menu_add:
+				text = "add";
+				break;
+			case R.id.side_navigation_menu_call:
+				text = "call";
+				break;
+			case R.id.side_navigation_menu_delete:
+				text = "delete";
+				break;
+			default:
+				text = "";
+			}
+			Toast.makeText(getApplicationContext(), "side menu:" + text,
+					Toast.LENGTH_SHORT).show();
+		}
+	};
 
 }

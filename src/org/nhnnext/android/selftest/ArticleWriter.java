@@ -5,6 +5,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import org.apache.http.Header;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -24,9 +28,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 
-public class Write_article extends Activity implements OnClickListener{
+public class ArticleWriter extends Activity implements OnClickListener{
 	
 	private EditText etWriter;
 	private EditText etTitle;
@@ -98,41 +103,60 @@ public class Write_article extends Activity implements OnClickListener{
 		case R.id.write_button_write:
 			
 			final Handler handler = new Handler();
-			new Thread(){
-				public void run(){
-					
-					handler.post(new Runnable() {
-						public void run(){
-							
-							progressDialog = ProgressDialog.show(Write_article.this, "", "업로드 중임!");
-						}
-					});
-					String ID = Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-					String DATE = new SimpleDateFormat("yyyy-MM-dd HH", Locale.KOREA).format(new Date());
-					Article article = new Article(
-							0,
-							etTitle.getText().toString(),
-							etWriter.getText().toString(),
-							ID,
-							etContent.getText().toString(),
-							DATE,
-							fileName);
-					
-					ProxyUP proxyUP = new ProxyUP();
-					proxyUP.uploadArticle(article, filePath);
-					
-					handler.post(new Runnable() {
-						public void run() { 
-							progressDialog.cancel();
-							
-							finish();
-						}
-					});
-				}
-			}.start();
+			progressDialog = ProgressDialog.show(ArticleWriter.this, "", "업로드 중임!");
+
+			String ID = Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+			String DATE = new SimpleDateFormat("yyyy-MM-dd HH", Locale.KOREA).format(new Date());
 			
-			break;
+			Article article = new Article(
+				0,
+				etTitle.getText().toString(),
+				etWriter.getText().toString(),
+				ID,
+				etContent.getText().toString(),
+				DATE,
+				fileName);
+					
+			ProxyUP.uploadArticle(article, filePath, 
+				new AsyncHttpResponseHandler() {
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							byte[] responseBody, Throwable error) {
+						Log.e("test", "up onFailure:" + statusCode);
+						progressDialog.cancel();
+						Toast.makeText(getApplicationContext(), "onFailure", Toast.LENGTH_SHORT).show();
+						finish();									
+					}
+
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
+							byte[] responseBody) {
+						Log.i("test", "up onSuccess:" + statusCode);
+						progressDialog.cancel();
+						Toast.makeText(getApplicationContext(), "onSuccess", Toast.LENGTH_SHORT).show();
+						finish();
+					}
+				});
+		
+		break;
 		}
 	}
-	
+
+					
+//					ProxyUP proxyUP = new ProxyUP();
+//					proxyUP.uploadArticle(article, filePath);
+//					
+//					handler.post(new Runnable() {
+//						public void run() { 
+//							progressDialog.cancel();
+//							
+//							finish();
+//						}
+//					});
+//				}
+//			}.start();
+//			
+//			break;
+//		}	
 }
