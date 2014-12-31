@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Selftest</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_custom_list_row">Custom_list_row</string>
+    <string name="title_activity_view_article">View_article</string>
+    <string name="title_activity_write_article">Write_article</string>
+
+</resources>
