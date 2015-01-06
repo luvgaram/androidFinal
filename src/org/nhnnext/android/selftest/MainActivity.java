@@ -20,7 +20,7 @@ import com.devspark.sidenavigation.ISideNavigationCallback;
 import com.devspark.sidenavigation.SideNavigationView;
 import com.devspark.sidenavigation.SideNavigationView.Mode;
 
-public class MainActivity extends ActionBarActivity implements OnClickListener, OnItemClickListener{
+public class MainActivity extends ActionBarActivity implements OnItemClickListener{
 
 	private ArrayList<Article> articleList;
 	private ListView listView;
@@ -38,14 +38,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 		sideNavigationView.setMenuItems(R.menu.side_menu);
 		sideNavigationView.setMenuClickCallback(sideNavigationCallback);
 		sideNavigationView.setMode(Mode.LEFT);
-		
-		
-		
-		Button mButtonWrite =  (Button)findViewById(R.id.main_button_write);
-		Button mButtonRefresh = (Button)findViewById(R.id.main_button_refresh);
-		
-		mButtonWrite.setOnClickListener(this);
-		mButtonRefresh.setOnClickListener(this);
 
 		listView = (ListView)findViewById(R.id.custom_list_listView);
 	}
@@ -56,27 +48,28 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 			return true;
 	}
 
-	
-
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item){
 		
 		String text ="";
 		
 		switch(item.getItemId()){
-		case android.R.id.home:
-			text = "Side Navigation toggle";
+		case android.R.id.home:			
+//			text = "Side Navigation toggle";
 			sideNavigationView.toggleMenu();
 			break;
 		case R.id.action_item_add:
-			text = "Action item, with text, displayed if room exists";
+			Intent intentWrite = new Intent(this, ArticleWriter.class);
+			startActivity(intentWrite);
+			text = "write your article";
 			break;
-		case R.id.action_item_search:
-			text = "Action item, icon only, always displayed";
+		case R.id.action_item_search:			
+			text = "refreshing";
+			refreshData();
 			break;
-		case R.id.action_item_normal:
-			text = "Normal menu item";
-			break;
+//		case R.id.action_item_normal:
+//			text = "Normal menu item";
+//			break;
 		default:
 			return false;
 			
@@ -87,16 +80,11 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 	
 	@Override
 	public void onResume() {
-		super.onResume();
-		
-		refreshData();
-		//listView();
-		
+		super.onResume();	
+		refreshData();	
 	}
 		private void listView(){
-			
-			
-			//ListView listView = (ListView)findViewById(R.id.custom_list_listView);
+
 			Dao dao = new Dao(getApplicationContext());
 			articleList = dao.getArticleList();
 			CustomAdapter customAdapter = new CustomAdapter(this, R.layout.custom_list_row, articleList);
@@ -121,8 +109,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 				 * 지정한 변수를 insertJsonData()로 레코드 생성 
 				 */
 				Dao dao = new Dao(getApplicationContext());
-				//String testJsonData = dao.getJsonTestData();
-				//dao.insertJsonData(testJsonData);
 				dao.insertJsonData(jsonData);
 				
 				handler.post(new Runnable(){
@@ -134,19 +120,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener, 
 		}.start();
 	}
 	
-	@Override
-	public void onClick(View arg0) {
-		
-		switch(arg0.getId()){
-		case R.id.main_button_write:
-			Intent intentWrite = new Intent(this, ArticleWriter.class);
-			startActivity(intentWrite);
-			//startActivity(intentWrite);
-		case R.id.main_button_refresh:
-			refreshData();
-			break;
-		}
-		}
 	@Override
 	public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 	
