@@ -63,7 +63,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 			startActivity(intentWrite);
 			text = "write your article";
 			break;
-		case R.id.action_item_search:			
+		case R.id.action_item_refresh:			
 			text = "refreshing";
 			refreshData();
 			break;
@@ -135,20 +135,24 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 		
 	}
 
+	public void writeStart() {
+		Intent intentWrite = new Intent(this, ArticleWriter.class);
+		startActivity(intentWrite);
+	}
+	
 	ISideNavigationCallback sideNavigationCallback = new ISideNavigationCallback() {
-		
+
 		@Override
 		public void onSideNavigationItemClick(int itemId) {
 			String text = "";
 			switch (itemId) {
 			case R.id.side_navigation_menu_add:
-				text = "add";
+				writeStart();
+				text = "write your article";
 				break;
-			case R.id.side_navigation_menu_call:
-				text = "call";
-				break;
-			case R.id.side_navigation_menu_delete:
-				text = "delete";
+			case R.id.side_navigation_menu_refresh:
+				text = "refreshing";
+				refreshData();
 				break;
 			default:
 				text = "";

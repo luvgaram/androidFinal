@@ -8,10 +8,10 @@
         app:showAsAction="ifRoom|withText"
         android:title="Add" />
     <item
-        android:id="@+id/action_item_search"
-        android:icon="@android:drawable/ic_menu_search"
-        app:showAsAction="always"
-        android:title="Action item with icon" />
+        android:id="@+id/action_item_refresh"
+        android:icon="@android:drawable/ic_menu_rotate"
+        app:showAsAction="ifRoom|withText"
+        android:title="Refresh" />
     <item
         android:id="@+id/action_item_normal"
         android:title="Normal item"/>

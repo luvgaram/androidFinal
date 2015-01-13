@@ -3,16 +3,16 @@
         <item
             android:id="@+id/side_navigation_menu_add"
             android:icon="@android:drawable/ic_menu_add"
-            android:title="add" />
-        <item
+            android:title="Add" />
+<!--         <item
             android:id="@+id/side_navigation_menu_call"
             android:icon="@android:drawable/ic_menu_call"
-            android:title="call" />
+            android:title="call" /> -->
         <item
-            android:id="@+id/side_navigation_menu_delete"
-            android:icon="@android:drawable/ic_menu_delete"
-            android:title="delete" />
-        <item
+            android:id="@+id/side_navigation_menu_refresh"
+            android:icon="@android:drawable/ic_menu_rotate"
+            android:title="Refresh" />
+<!--         <item
             android:id="@+id/side_navigation_menu_text"
-            android:title="menu5" />
+            android:title="menu5" /> -->
     </menu>
